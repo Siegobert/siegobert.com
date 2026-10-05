@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://siegobert.com/sitemap.xml

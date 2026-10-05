@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Siegobert Jansen</title>
+<meta name="description" content="Siegobert Jansen — horeca, gastvrijheid en ICT bij het Muziekgebouw Eindhoven. Er zit een knop op deze pagina." />
+<link rel="canonical" href="https://siegobert.com/" />
+<meta property="og:title" content="Siegobert Jansen" />
+<meta property="og:description" content="Er zit een knop op deze pagina. Meer is het niet." />
+<meta property="og:url" content="https://siegobert.com/" />
+<meta property="og:image" content="https://aboutme.b-cdn.net/background/users/s/i/e/siegobert_1696230103_531.jpg?quality=80&amp;format=auto&amp;width=1200&amp;height=630&amp;face_crop=373,196" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFE600;
+    --fg:#141414;
+    --sans:"Archivo",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--fg);
+    font-family:var(--sans);-webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;
+    transition:background .35s ease,color .35s ease;
+    overflow-x:hidden;
+  }
+
+  /* ---------- gesloten: het licht is uit ---------- */
+  body.off{background:#0B0C0F;color:#EDE9DF}
+  body.off .top,body.off main,body.off footer{opacity:0;pointer-events:none}
+  .top,main,footer{transition:opacity .7s ease}
+
+  .blackout{
+    position:fixed;inset:0;z-index:20;display:grid;place-items:center;
+    padding:24px;text-align:center;
+    opacity:0;visibility:hidden;transition:opacity .6s ease,visibility .6s;
+  }
+  body.off .blackout{opacity:1;visibility:visible}
+  .blackout .line{
+    font-family:var(--sans);font-weight:700;letter-spacing:-.01em;
+    font-size:clamp(20px,3.6vw,30px);color:#EDE9DF;margin:0 0 7px;
+  }
+  .blackout .sub{
+    font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:#6E6D67;margin:0 0 clamp(28px,5vw,44px);
+  }
+  button.bigswitch{
+    position:relative;display:block;margin:0 auto;
+    width:92px;height:148px;padding:0;cursor:pointer;
+    background:#15171C;border:1px solid #24272E;border-radius:10px;
+    transition:border-color .35s ease,box-shadow .5s ease;
+  }
+  button.bigswitch:hover{border-color:#E8B356;box-shadow:0 0 34px rgba(232,179,86,.18)}
+  button.bigswitch:focus-visible{outline:2px solid #E8B356;outline-offset:6px}
+  button.bigswitch .rocker{
+    position:absolute;left:15px;right:15px;top:15px;bottom:15px;border-radius:6px;
+    background:linear-gradient(180deg,#23262D 0%,#1A1D23 46%,#2B2F37 47%,#33373F 100%);
+    box-shadow:inset 0 2px 5px rgba(0,0,0,.6);transition:background .4s ease;
+  }
+  button.bigswitch:hover .rocker{
+    background:linear-gradient(180deg,#282C34 0%,#1E2128 46%,#32363F 47%,#3B404A 100%);
+  }
+  button.bigswitch .dot{
+    position:absolute;left:50%;bottom:18px;width:7px;height:7px;margin-left:-3.5px;
+    border-radius:50%;background:#E8B356;animation:pilot 3.4s ease-in-out infinite;
+  }
+  button.bigswitch:hover .dot{animation-duration:1.5s}
+  @keyframes pilot{
+    0%,100%{opacity:.45;box-shadow:0 0 6px rgba(232,179,86,.25)}
+    50%{opacity:1;box-shadow:0 0 16px rgba(232,179,86,.6)}
+  }
+  .blackout .hint{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;
+    color:#8E8A7E;margin:20px 0 0;
+  }
+  .blackout .whisper{
+    font-family:var(--mono);font-size:11.5px;color:#4E4D49;margin:14px 0 0;
+    opacity:0;transition:opacity 1.6s ease;
+  }
+  .blackout .whisper.on{opacity:1}
+
+  .top{
+    display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    padding:18px clamp(16px,4vw,34px);
+    font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  }
+  .top b{font-weight:500}
+
+  main{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:clamp(22px,4vh,40px);padding:10px clamp(16px,5vw,40px) clamp(20px,4vh,40px);
+    text-align:center;
+  }
+
+  /* ---------- de knop ---------- */
+  button.big{
+    position:relative;font-family:var(--sans);font-weight:800;
+    font-size:clamp(22px,4.6vw,44px);letter-spacing:-.02em;text-transform:uppercase;
+    color:var(--bg);background:var(--fg);border:0;border-radius:999px;
+    padding:clamp(20px,3.6vh,34px) clamp(34px,6vw,70px);cursor:pointer;
+    box-shadow:0 10px 0 rgba(0,0,0,.22);
+    transition:transform .12s ease,box-shadow .12s ease,background .35s ease,color .35s ease;
+  }
+  button.big:hover{transform:translateY(-2px);box-shadow:0 12px 0 rgba(0,0,0,.22)}
+  button.big:active{transform:translateY(8px);box-shadow:0 2px 0 rgba(0,0,0,.22)}
+  button.big:focus-visible{outline:4px solid var(--fg);outline-offset:6px}
+
+  /* ---------- het kaartje ---------- */
+  .card{
+    max-width:46ch;min-height:clamp(120px,22vh,190px);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  }
+  .card .kind{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
+    opacity:.6;margin:0;
+  }
+  .card .huge{
+    font-weight:800;font-size:clamp(52px,13vw,120px);line-height:.88;letter-spacing:-.04em;margin:0;
+  }
+  .card .txt{
+    font-size:clamp(17px,2.4vw,23px);line-height:1.42;font-weight:500;margin:0;
+  }
+  .card .sub{font-size:15px;line-height:1.45;opacity:.72;margin:0;max-width:40ch}
+  .card a.jump{
+    display:inline-block;margin-top:4px;font-family:var(--mono);font-size:12px;
+    letter-spacing:.14em;text-transform:uppercase;color:inherit;text-decoration:none;
+    border:2px solid currentColor;border-radius:999px;padding:10px 18px;
+    transition:background .18s ease,color .18s ease;
+  }
+  .card a.jump:hover{background:var(--fg);color:var(--bg)}
+  .card a.jump:focus-visible{outline:3px solid var(--fg);outline-offset:4px}
+
+  .pop{animation:pop .36s cubic-bezier(.2,1.5,.4,1)}
+  @keyframes pop{from{opacity:0;transform:scale(.93) translateY(8px)}to{opacity:1;transform:none}}
+
+  footer{
+    display:flex;justify-content:space-between;gap:12px 22px;flex-wrap:wrap;
+    padding:16px clamp(16px,4vw,34px) 22px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  }
+  footer nav{display:flex;gap:16px;flex-wrap:wrap}
+  footer a{color:inherit;text-decoration:none;border-bottom:1.5px solid currentColor;opacity:.75}
+  footer a:hover{opacity:1}
+  footer a:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+
+  @media (prefers-reduced-motion:reduce){
+    body,button.big,.card a.jump,.top,main,footer{transition:none}
+    button.bigswitch .dot{animation:none;opacity:.9}
+    .blackout .whisper{transition:none}
+    .pop{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="blackout" id="blackout">
+  <div>
+    <p class="line">Er hangt geen bord buiten.</p>
+    <p class="sub">Achterin de gang, links van de jassen</p>
+    <button class="bigswitch" type="button" id="big" aria-label="Doe het licht aan">
+      <span class="rocker"></span>
+      <span class="dot"></span>
+    </button>
+    <p class="hint">U bent verwacht</p>
+    <p class="whisper" id="whisper">Neem de tijd. Het is hier toch al donker.</p>
+  </div>
+</div>
+
+<div class="top">
+  <span><b>Siegobert Jansen</b> &mdash; Muziekgebouw Eindhoven</span>
+  <span>Keer gedrukt: <b id="count">0</b></span>
+</div>
+
+<main>
+  <div class="card pop" id="card" aria-live="polite">
+    <p class="kind">Welkom</p>
+    <p class="txt">Er zit een knop op deze pagina.<br>Meer is het eigenlijk niet.</p>
+    <p class="sub">Druk erop en je krijgt iets. Wat, dat weet ik ook niet precies.</p>
+  </div>
+
+  <button class="big" type="button" id="go">Druk op de knop</button>
+</main>
+
+<footer>
+  <nav id="pages">
+    <a href="profiel.html">Werkervaring</a>
+    <a href="italia.html" id="ooo">Waar ik nu ben</a>
+  </nav>
+  <nav>
+    <a href="https://www.linkedin.com/in/siegobert/" target="_blank" rel="noreferrer">LinkedIn</a>
+    <a href="https://about.me/siegobert" target="_blank" rel="noreferrer">about.me</a>
+    <a href="https://www.instagram.com/siegobert/" target="_blank" rel="noreferrer">Instagram</a>
+  </nav>
+</footer>
+
+<script>
+(function(){
+  var PALETTE = [
+    ["#FFE600","#141414"], ["#C4300F","#FFF6F2"], ["#0B6E4F","#F2FBF6"],
+    ["#1B2AC4","#F3F4FF"], ["#E8B356","#1A1408"], ["#141414","#FFE600"],
+    ["#C2342B","#FFF4F2"], ["#2BB3A3","#07211E"], ["#B32B74","#FFF2F9"],
+    ["#F2E572","#1B1B19"], ["#3D2B56","#F6EFFF"], ["#1A1A1A","#2BB3A3"]
+  ];
+
+  var LABELS = [
+    "Druk op de knop","Nog een keer","Toe maar","Opnieuw","Doe het",
+    "Geef me iets","Verras me","Ja hoor","Vooruit dan","Nog eentje"
+  ];
+
+  var ITEMS = [
+    // ---- de teksten ----
+    {k:"Artiestinformatie", t:"Bij het Muziekgebouw Eindhoven ben ik verantwoordelijk voor de horeca, de gastvrijheid en de ICT.", s:"Een combinatie die vaker uitleg behoeft dan mij lief is."},
+    {k:"Artiestinformatie", t:"Daarvoor stond ik zeventien jaar in het Parktheater, en daarvoor had ik mijn eigen horecazaken.", s:"Bij elkaar ruim twintig jaar in een sector waar de zaal om acht uur vol zit, of niet."},
+    {k:"Artiestinformatie", t:"Het werk gaat over contracten, tenders en processen.", s:"Over inhuur terugbrengen naar vaste mensen, over licenties waar niemand meer naar keek, en over systemen die het gewoon moeten doen op de avond dat het uitverkocht is."},
+    {k:"Artiestinformatie", t:"Ik ben geen beheerder maar een veranderaar.", s:"Wat een nette manier is om te zeggen dat ik slecht stil kan zitten als iets beter kan. Wel met data en scenario's erbij, want een onderbuikgevoel is geen plan."},
+    {k:"Buiten werktijd", t:"Wijn, eten, bier, en \\u00e9\\u00e9n hobby die moeilijker uit te leggen is dan de rest.", s:"Nee."},
+
+    // ---- de cijfers ----
+    {k:"Personeelskosten", n:"25%", s:"eraf, door inhuur om te zetten naar mensen in eigen dienst. En elke week dezelfde gezichten, wat zwaarder telt."},
+    {k:"Licentiekosten", n:"75%", s:"eraf, na de overstap naar het nonprofittarief voor 55 medewerkers. Het stond gewoon in de voorwaarden."},
+    {k:"Vaste personeelsschil", n:"45%", s:"kleiner, rond een vaste flexpool. Risico's van schijnzelfstandigheid meteen afgedekt."},
+    {k:"Glazen Hertog Jan", n:"4.531", s:"van 23 cl, geteld over vier bars. Iemand moest dat uitzoeken. Dat was ik."},
+    {k:"Bij \\u00e9\\u00e9n huis", n:"17 jr", s:"Parktheater, van 2005 tot 2022. Lang genoeg om je eigen veranderingen te moeten uitzitten."},
+    {k:"Naar Elba", n:"1.480", s:"kilometer, met de auto, volledig vrijwillig. Er is een kaart van gemaakt."},
+    {k:"Klompenmaker", n:"1811", s:"Het jaar waarin een Jansen in Tiel klompen maakte. Zes generaties terug."},
+    {k:"Sponsorpartnership", n:"5 jaar", s:"Tendertraject huisbrouwer. Financi\\u00eble waarde en merkpositionering in \\u00e9\\u00e9n contract."},
+
+    // ---- de grappen ----
+    {k:"Boekhoudkundig feit", t:"In onze boekhouding valt wijn onder bier.", s:"Dat zegt alles over de btw en niets over de wijn."},
+    {k:"Naamsverklaring", t:"Ik heet Siegobert naar mijn overgrootvader Sigebert van Dreumel uit Wamel.", s:"Ja, met een s. Nee, dat scheelt niet veel."},
+    {k:"Werkwijze", t:"Sturen op argumenten, niet op hi\\u00ebrarchie.", s:"Het scherpe gesprek is meestal het kortste pad naar duidelijkheid."},
+    {k:"Waarschuwing", t:"Ik zie verbetermogelijkheden vaak vroeg.", s:"Niet iedere organisatie beweegt in hetzelfde tempo. Daar werk ik aan."},
+    {k:"Eis", t:"Geen bruine M&amp;M's.", s:"Dit is de enige eis die niemand ooit controleert."},
+    {k:"Observatie", t:"De zaal zit om acht uur vol, of niet.", s:"Daartussen zit niets. Dat maakt het werk eerlijk."},
+
+    // ---- de doorverwijzingen ----
+    {k:"Bijlage A", t:"De lange versie staat ergens anders.", s:"Drie functies, de trajecten die eronder hingen, en wat het opleverde.", href:"profiel.html", cta:"Werkervaring"},
+    {k:"Bijlage B", t:"Op dit moment ben ik hier niet.", s:"Beter gedocumenteerd dan nodig was.", href:"italia.html", cta:"Kijk dan", ooo:true}
+  ];
+
+  var EGGS = {
+    5:  {k:"Observatie", t:"Vijf keer.", s:"U heeft duidelijk tijd. Dat waardeer ik."},
+    12: {k:"Tussenstand", t:"Twaalf keer.", s:"Er zijn er ongeveer twintig. U bent goed op weg."},
+    25: {k:"Mededeling", t:"Vijfentwintig keer.", s:"Dit is meer aandacht dan mijn jaarplan krijgt."},
+    40: {k:"Bezorgdheid", t:"Veertig keer.", s:"Alles goed thuis? Er staat beneden ook gewoon een link."}
+  };
+
+  var card = document.getElementById("card"),
+      go = document.getElementById("go"),
+      counter = document.getElementById("count"),
+      n = 0, lastItem = -1, lastPal = -1;
+
+  function pick(max, last){
+    var i = Math.floor(Math.random() * max);
+    if (i === last) i = (i + 1 + Math.floor(Math.random() * (max - 1))) % max;
+    return i;
+  }
+
+  var pool = ITEMS.filter(function(it){
+    return !(it.ooo && new Date() >= new Date(2026, 8, 14));
+  });
+
+  function render(it){
+    var html = '<p class="kind">' + it.k + '</p>';
+    if (it.n) html += '<p class="huge">' + it.n + '</p>';
+    if (it.t) html += '<p class="txt">' + it.t + '</p>';
+    if (it.s) html += '<p class="sub">' + it.s + '</p>';
+    if (it.href) html += '<a class="jump" href="' + it.href + '">' + it.cta + ' &rarr;</a>';
+    card.innerHTML = html;
+    card.classList.remove("pop");
+    void card.offsetWidth;
+    card.classList.add("pop");
+  }
+
+  function press(){
+    n++;
+    counter.textContent = n;
+
+    var p = pick(PALETTE.length, lastPal); lastPal = p;
+    document.documentElement.style.setProperty("--bg", PALETTE[p][0]);
+    document.documentElement.style.setProperty("--fg", PALETTE[p][1]);
+
+    if (EGGS[n]) { render(EGGS[n]); }
+    else {
+      var i = pick(pool.length, lastItem); lastItem = i;
+      render(pool[i]);
+    }
+
+    go.textContent = LABELS[Math.floor(Math.random() * LABELS.length)];
+  }
+
+  /* ---- het licht ---- */
+  var body = document.body,
+      blackout = document.getElementById("blackout"),
+      big = document.getElementById("big"),
+      whisper = document.getElementById("whisper"),
+      nudge = null;
+
+  function lights(on){
+    body.classList.toggle("off", !on);
+    blackout.setAttribute("aria-hidden", on ? "true" : "false");
+    ["top","main","footer"].forEach(function(sel){
+      var el = document.querySelector(sel === "top" ? ".top" : sel);
+      if (el) el.setAttribute("aria-hidden", on ? "false" : "true");
+    });
+  }
+
+  function armWhisper(){
+    clearTimeout(nudge);
+    whisper.classList.remove("on");
+    nudge = setTimeout(function(){
+      if (body.classList.contains("off")) whisper.classList.add("on");
+    }, 7000);
+  }
+
+  big.addEventListener("click", function(){
+    clearTimeout(nudge);
+    whisper.classList.remove("on");
+    lights(true);
+    go.focus();
+  });
+
+  go.addEventListener("click", press);
+
+  document.addEventListener("keydown", function(e){
+    if (body.classList.contains("off")){
+      if ((e.key === "Enter" || e.key === " ") && document.activeElement !== big){
+        e.preventDefault(); big.click();
+      }
+      return;
+    }
+    if ((e.key === " " || e.key === "Enter") && document.activeElement !== go
+        && !/^(A|BUTTON|INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) {
+      e.preventDefault(); press();
+    }
+  });
+
+  // de pagina begint donker; zonder JavaScript is alles gewoon zichtbaar
+  lights(false);
+  armWhisper();
+
+  // de out-of-office verdwijnt op 14 september 2026
+  var row = document.getElementById("ooo");
+  if (row && new Date() >= new Date(2026, 8, 14)) row.remove();
+})();
+</script>
+</body>
+</html>
