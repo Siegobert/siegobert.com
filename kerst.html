@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Siegobert — december</title>
+<meta name="description" content="Vierentwintig deurtjes, één per dag. De adventskalender van Siegobert Jansen, Muziekgebouw Eindhoven." />
+<link rel="canonical" href="https://siegobert.com/" />
+<meta property="og:title" content="Siegobert — december" />
+<meta property="og:description" content="Vierentwintig deurtjes, één per dag." />
+<meta property="og:url" content="https://siegobert.com/" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#0E1512;
+    --deep:#0A0F0D;
+    --cream:#F2EDE2;
+    --gold:#E8B356;
+    --red:#C2342B;
+    --green:#1F5D43;
+    --dim:#7E8C85;
+    --sans:"Archivo",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--deep);color:var(--cream);
+    font-family:var(--sans);-webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;overflow-x:hidden;
+    background-image:radial-gradient(120% 70% at 50% -10%, #16211C, #090D0B 70%);
+    transition:background-image .9s ease;
+  }
+  body.lit{background-image:radial-gradient(120% 75% at 50% -5%, #1C2B24, #0B100E 72%)}
+
+  /* ---------- de donkere kamer ---------- */
+  .dark{
+    position:fixed;inset:0;z-index:20;display:grid;place-items:center;
+    padding:24px;text-align:center;
+    transition:opacity .8s ease,visibility .8s;
+  }
+  body.lit .dark{opacity:0;visibility:hidden;pointer-events:none}
+  .dark .line{font-weight:700;font-size:clamp(19px,3.4vw,27px);margin:0 0 7px;letter-spacing:-.01em}
+  .dark .sub{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+             color:var(--dim);margin:0 0 clamp(26px,4vw,38px)}
+  .dark .hint{font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;
+              color:#8E8A7E;margin:18px 0 0}
+
+  /* het boompje */
+  .tree{display:block;margin:0 auto clamp(22px,4vw,34px)}
+  .tree .body{fill:#15241D;stroke:#243A31;stroke-width:1.5}
+  .tree .trunk{fill:#1B1510}
+  .tree .star{fill:#2A3630;transition:fill .5s ease}
+  .tree .bulb{fill:#223029;transition:fill .5s ease,filter .5s ease}
+  body.lit .tree .star{fill:var(--gold)}
+
+  /* het sinterklaasje dat tot 6 december in de boom hangt */
+  .tree .draad{stroke:#2A3630;stroke-width:1;transition:stroke .5s ease}
+  .tree .rood{fill:#273029;transition:fill .5s ease}
+  .tree .wit{fill:#2E3A34;transition:fill .5s ease}
+  .tree .staf{stroke:#2A3630;stroke-width:1.6;fill:none;transition:stroke .5s ease}
+  body.lit .tree .draad{stroke:#6E8378}
+  body.lit .tree .rood{fill:var(--red)}
+  body.lit .tree .wit{fill:var(--cream)}
+  body.lit .tree .staf{stroke:var(--gold)}
+  body.lit .tree .bulb{fill:var(--gold)}
+
+  /* de achtervolging onder aan het scherm */
+  .jacht{
+    position:absolute;left:0;right:0;bottom:6%;height:112px;overflow:hidden;pointer-events:none;
+  }
+  .loper{position:absolute;bottom:0;left:0;animation:rennen 9s linear infinite}
+  .loper.kerst{animation-delay:-.85s}
+  .loper .bob{animation:huppel .42s ease-in-out infinite alternate;transform-box:view-box;transform-origin:50% 100%}
+  .loper.kerst .bob{animation-duration:.36s}
+  @keyframes rennen{
+    from{transform:translateX(-180px)}
+    to{transform:translateX(calc(100vw + 180px))}
+  }
+  @keyframes huppel{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-6px) rotate(2deg)}}
+
+  .fig .rood{fill:#273029;transition:fill .5s ease}
+  .fig .wit{fill:#2E3A34;transition:fill .5s ease}
+  .fig .donker{fill:#1A211D;transition:fill .5s ease}
+  .fig .zak{fill:#2A3028;transition:fill .5s ease}
+  .fig .staf{stroke:#2A3630;stroke-width:2.4;fill:none;stroke-linecap:round;transition:stroke .5s ease}
+  body.lit .fig .rood{fill:var(--red)}
+  body.lit .fig .wit{fill:var(--cream)}
+  body.lit .fig .donker{fill:#17110E}
+  body.lit .fig .zak{fill:#6B4A2F}
+  body.lit .fig .staf{stroke:var(--gold)}
+
+  @media (prefers-reduced-motion:reduce){
+    .loper,.loper .bob{animation:none}
+    .loper.sint{transform:translateX(16vw)}
+    .loper.kerst{transform:translateX(2vw)}
+  }
+  @media(max-width:620px){ .jacht{height:86px} .fig{height:86px} }
+
+  button.plug{
+    position:relative;display:block;margin:0 auto;
+    width:86px;height:112px;padding:0;cursor:pointer;
+    background:#141A17;border:1px solid #243029;border-radius:10px;
+    transition:border-color .35s ease,box-shadow .5s ease;
+  }
+  button.plug:hover{border-color:var(--gold);box-shadow:0 0 34px rgba(232,179,86,.18)}
+  button.plug:focus-visible{outline:2px solid var(--gold);outline-offset:6px}
+  button.plug .socket{
+    position:absolute;left:50%;top:30px;width:40px;height:40px;margin-left:-20px;
+    border-radius:50%;background:#0E1310;box-shadow:inset 0 2px 5px rgba(0,0,0,.7);
+  }
+  button.plug .pin{position:absolute;top:16px;width:7px;height:9px;border-radius:2px;background:#3A4A42}
+  button.plug .pin.l{left:11px}
+  button.plug .pin.r{right:11px}
+  button.plug .led{
+    position:absolute;left:50%;bottom:16px;width:7px;height:7px;margin-left:-3.5px;
+    border-radius:50%;background:var(--gold);animation:pilot 3.4s ease-in-out infinite;
+  }
+  button.plug:hover .led{animation-duration:1.4s}
+  @keyframes pilot{
+    0%,100%{opacity:.4;box-shadow:0 0 6px rgba(232,179,86,.25)}
+    50%{opacity:1;box-shadow:0 0 16px rgba(232,179,86,.6)}
+  }
+
+  /* ---------- de kalender ---------- */
+  .page{flex:1;display:flex;flex-direction:column;opacity:0;transition:opacity .9s ease .25s}
+  body.lit .page{opacity:1}
+
+  .top{
+    display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    padding:18px clamp(16px,4vw,34px);
+    font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+  }
+  .top b{font-weight:500;color:var(--cream)}
+
+  main{flex:1;padding:clamp(6px,2vh,20px) clamp(16px,4vw,40px) clamp(24px,4vh,44px);
+       max-width:980px;margin:0 auto;width:100%}
+  h1{
+    font-weight:800;font-size:clamp(28px,6vw,58px);line-height:.95;letter-spacing:-.035em;
+    text-transform:uppercase;margin:0 0 10px;text-align:center;
+  }
+  h1 em{font-style:normal;color:var(--gold)}
+  .intro{text-align:center;color:var(--dim);margin:0 auto clamp(22px,4vw,38px);max-width:46ch;font-size:16px}
+
+  .sectie{margin:0 0 clamp(30px,5vw,52px)}
+  .sectie h2{
+    font-weight:800;font-size:clamp(17px,2.6vw,24px);letter-spacing:-.02em;text-transform:uppercase;
+    margin:0 0 6px;text-align:center;
+  }
+  .sectie h2 em{font-style:normal;color:var(--red)}
+  .sectie .wat{
+    text-align:center;color:var(--dim);margin:0 auto clamp(16px,3vw,26px);max-width:44ch;font-size:15px;
+  }
+  .hr{border:0;border-top:1px solid #22332B;margin:clamp(30px,5vw,50px) 0}
+
+  .grid{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(8px,1.6vw,16px)}
+  .grid.sint{grid-template-columns:repeat(7,1fr)}
+  .grid.sint button.door{aspect-ratio:1/.82;font-size:clamp(14px,2.4vw,21px);line-height:1}
+  .grid.sint button.door small{
+    display:block;font-family:var(--mono);font-weight:400;font-size:8.5px;
+    letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-top:3px;
+  }
+  button.door.vers{border-color:#4A2A28}
+  button.door.vers.opened{background:#2A1A18;border-color:#5E3330;color:#E8A08A}
+  button.door{
+    position:relative;aspect-ratio:1;cursor:pointer;
+    background:#13201A;border:1px solid #27382F;border-radius:6px;
+    font-family:var(--sans);font-weight:800;font-size:clamp(17px,3vw,27px);
+    color:#6E8378;letter-spacing:-.02em;
+    transition:transform .2s cubic-bezier(.2,1.4,.4,1),border-color .25s,color .25s,background .25s;
+  }
+  button.door:hover{transform:translateY(-3px) rotate(-1deg);border-color:var(--gold);color:var(--cream)}
+  button.door:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  button.door.today{border-color:var(--gold);color:var(--gold);box-shadow:0 0 22px rgba(232,179,86,.22)}
+  button.door.opened{background:#1B2F26;color:var(--gold);border-color:#35564A}
+  button.door.opened::after{
+    content:"";position:absolute;right:7px;top:7px;width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.7;
+  }
+  button.door.locked{opacity:.42;cursor:not-allowed}
+  button.door.locked:hover{transform:none;border-color:#27382F;color:#6E8378}
+
+  /* de ster op de boom = 25 december */
+  .star-door{display:grid;place-items:center;margin:clamp(16px,3vw,26px) 0 0}
+  button.star{
+    background:transparent;border:0;cursor:pointer;padding:8px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);
+  }
+  button.star svg{display:block;margin:0 auto 7px}
+  button.star svg path{fill:#2A3630;transition:fill .4s ease}
+  button.star:hover svg path,button.star:focus-visible svg path{fill:var(--gold)}
+  button.star:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+  button.star.locked{opacity:.4;cursor:not-allowed}
+  button.star.locked:hover svg path{fill:#2A3630}
+
+  .verder{display:grid;place-items:center;margin:clamp(26px,5vw,46px) 0 0}
+  a.terug{
+    display:inline-block;font-family:var(--sans);font-weight:800;
+    font-size:clamp(15px,2.2vw,19px);letter-spacing:-.01em;text-transform:uppercase;
+    background:var(--gold);color:#14211B;text-decoration:none;
+    padding:15px 28px;border-radius:999px;box-shadow:0 7px 0 rgba(0,0,0,.4);
+    transition:transform .12s ease,box-shadow .12s ease;
+  }
+  a.terug:hover{transform:translateY(-2px);box-shadow:0 9px 0 rgba(0,0,0,.4)}
+  a.terug:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.4)}
+  a.terug:focus-visible{outline:3px solid var(--gold);outline-offset:5px}
+  .verder p{
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--dim);margin:12px 0 0;text-align:center;
+  }
+
+  footer{
+    display:flex;justify-content:space-between;gap:12px 22px;flex-wrap:wrap;
+    padding:16px clamp(16px,4vw,34px) 24px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+  }
+  footer nav{display:flex;gap:16px;flex-wrap:wrap}
+  footer a{color:inherit;text-decoration:none;border-bottom:1.5px solid currentColor;opacity:.7}
+  footer a:hover{opacity:1;color:var(--gold)}
+  footer a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+  /* ---------- het luikje dat opengaat ---------- */
+  .panel{
+    position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:22px;
+    background:rgba(6,10,8,.78);backdrop-filter:blur(3px);
+    opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s;
+  }
+  .panel.on{opacity:1;visibility:visible}
+  .panel .box{
+    position:relative;max-width:46ch;width:100%;text-align:center;
+    background:#14211B;border:1px solid #2C4036;border-radius:10px;
+    padding:clamp(26px,5vw,42px) clamp(20px,4vw,34px);
+    transform:scale(.95);transition:transform .32s cubic-bezier(.2,1.5,.4,1);
+  }
+  .panel.on .box{transform:none}
+  .panel .day{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin:0 0 14px}
+  .panel .huge{font-weight:800;font-size:clamp(44px,11vw,88px);line-height:.9;letter-spacing:-.04em;margin:0 0 12px;color:var(--gold)}
+  .panel .txt{font-size:clamp(17px,2.4vw,21px);font-weight:500;line-height:1.4;margin:0}
+  .panel .vers{
+    font-size:clamp(16px,2.2vw,19px);font-weight:500;line-height:1.72;margin:0;
+    white-space:pre-line;text-align:left;
+  }
+  .panel .day.rood{color:#E8A08A}
+  .panel .sub{font-size:15px;line-height:1.5;color:var(--dim);margin:12px 0 0}
+  .panel .close{
+    position:absolute;top:10px;right:12px;background:transparent;border:0;cursor:pointer;
+    font-family:var(--mono);font-size:16px;color:var(--dim);padding:6px 9px;line-height:1;
+  }
+  .panel .close:hover{color:var(--cream)}
+  .panel .close:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+  .panel form{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+  .panel form input{
+    font-family:var(--sans);font-size:15px;font-weight:500;color:var(--cream);
+    background:transparent;border:2px solid #3B5349;border-radius:999px;padding:11px 16px;min-width:min(240px,66vw);
+  }
+  .panel form input::placeholder{color:var(--dim)}
+  .panel form input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .panel form button{
+    font-family:var(--sans);font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    cursor:pointer;background:var(--gold);color:#14211B;border:2px solid var(--gold);
+    border-radius:999px;padding:11px 20px;
+  }
+  .panel form button:hover{filter:brightness(1.08)}
+  .panel .done{font-size:15px;margin:16px 0 0;color:var(--gold)}
+
+  .preview{
+    text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--gold);opacity:.75;margin:0 0 18px;
+  }
+
+  @media(max-width:620px){ .grid{grid-template-columns:repeat(4,1fr)} }
+  @media (prefers-reduced-motion:reduce){
+    body,.page,.dark,.panel,.panel .box,button.door,.tree .bulb,.tree .star{transition:none}
+    button.plug .led{animation:none;opacity:.9}
+  }
+</style>
+</head>
+<body>
+
+<!-- de donkere kamer -->
+<div class="dark" id="dark">
+  <div>
+    <svg class="tree" width="186" height="184" viewBox="0 0 152 150" aria-hidden="true">
+      <path class="star" d="M66 6 l5 11 12 2 -8.5 8.5 2 12 -10.5 -5.5 -10.5 5.5 2 -12 -8.5 -8.5 12 -2z"/>
+      <path class="body" d="M66 34 L92 72 H74 L100 108 H32 L58 72 H40 Z"/>
+      <rect class="trunk" x="60" y="108" width="12" height="16" rx="2"/>
+      <circle class="bulb" cx="66" cy="60" r="3"/>
+      <circle class="bulb" cx="54" cy="84" r="3"/>
+      <circle class="bulb" cx="79" cy="86" r="3"/>
+      <circle class="bulb" cx="44" cy="101" r="3"/>
+      <circle class="bulb" cx="66" cy="97" r="3"/>
+      <circle class="bulb" cx="88" cy="101" r="3"/>
+
+    </svg>
+
+    <p class="line">Er hangt geen bord buiten.</p>
+    <p class="sub">Alleen een boom die het nog niet doet</p>
+
+    <button class="plug" type="button" id="plug" aria-label="Steek de stekker in">
+      <span class="pin l"></span><span class="pin r"></span>
+      <span class="socket"></span>
+      <span class="led"></span>
+    </button>
+    <p class="hint">Stekker erin</p>
+  </div>
+
+<div class="jacht" id="jacht" aria-hidden="true">
+
+  <!-- Sinterklaas, op de vlucht -->
+  <div class="loper sint">
+    <svg class="fig" width="104" height="112" viewBox="0 0 104 112">
+      <g class="bob">
+        <!-- staf -->
+        <path class="staf" d="M74 34 v62 M74 34 a7 7 0 1 0 -7 7"/>
+        <!-- mijter -->
+        <path class="rood" d="M40 6 l16 26 h-32 z"/>
+        <path class="wit" d="M38 22 l4 7 -8 0 z"/>
+        <!-- hoofd -->
+        <circle class="wit" cx="40" cy="40" r="11"/>
+        <!-- baard -->
+        <path class="wit" d="M29 42 q11 34 22 0 q-3 14 -11 16 q-8 -2 -11 -16z"/>
+        <!-- mantel, naar achteren wapperend -->
+        <path class="rood" d="M26 50 h28 l10 38 h-14 l-6 -14 -8 14 h-16 z"/>
+        <path class="rood" d="M26 54 l-16 16 6 6 14 -12z"/>
+        <!-- schoenen -->
+        <path class="donker" d="M22 88 h14 l2 8 h-18z"/>
+        <path class="donker" d="M50 84 l12 8 -4 7 -12 -9z"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- de Kerstman, in de achtervolging -->
+  <div class="loper kerst">
+    <svg class="fig" width="112" height="112" viewBox="0 0 112 112">
+      <g class="bob">
+        <!-- zak over de schouder -->
+        <path class="zak" d="M10 46 q-6 22 10 30 q18 6 22 -10 q2 -16 -12 -22 z"/>
+        <!-- muts -->
+        <path class="rood" d="M44 14 q16 -8 24 8 l-6 10 h-22 z"/>
+        <circle class="wit" cx="70" cy="16" r="5"/>
+        <path class="wit" d="M38 30 h28 v7 h-28z"/>
+        <!-- hoofd -->
+        <circle class="wit" cx="52" cy="44" r="11"/>
+        <!-- baard -->
+        <path class="wit" d="M40 44 q12 32 24 0 q0 18 -12 20 q-12 -2 -12 -20z"/>
+        <!-- pak -->
+        <path class="rood" d="M38 52 h28 l8 34 h-12 l-6 -12 -8 12 h-14 z"/>
+        <path class="donker" d="M38 64 h32 v7 h-32z"/>
+        <path class="staf" d="M50 67 h8" style="stroke-width:5"/>
+        <!-- uitgestrekte arm, bijna beet -->
+        <path class="rood" d="M66 56 l20 -8 4 7 -20 9z"/>
+        <circle class="wit" cx="90" cy="50" r="5"/>
+        <!-- laarzen -->
+        <path class="donker" d="M34 86 h14 l2 9 h-18z"/>
+        <path class="donker" d="M62 82 l12 9 -4 7 -12 -10z"/>
+      </g>
+    </svg>
+  </div>
+
+</div>
+</div>
+
+<!-- de kalender -->
+<div class="page">
+  <div class="top">
+    <span><b>Siegobert</b> — Muziekgebouw Eindhoven</span>
+    <span>December <b id="jaar">2026</b></span>
+  </div>
+
+  <main>
+    <h1>Eén deurtje <em>per dag</em></h1>
+    <p class="intro">Van de intocht tot eerste kerstdag. De rest blijft dicht, en dat is niet uit flauwigheid maar uit principe. Vanaf 6 december staat er bij elk deurtje wat er die avond in de stad te doen is.</p>
+    <p class="preview" id="preview" hidden>Voorvertoning — normaal gaat er één deurtje per dag open</p>
+
+    <div class="grid sint" id="grid"></div>
+
+    <div class="star-door">
+      <button class="star locked" type="button" id="star" aria-label="Eerste kerstdag">
+        <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M20 2 l5 11.5 12.5 1.8 -9 8.8 2.1 12.4 -10.6 -5.8 -10.6 5.8 2.1 -12.4 -9 -8.8 12.5 -1.8z"/>
+        </svg>
+        25 december
+      </button>
+    </div>
+    <div class="verder">
+      <a class="terug" href="index.html">Verder met de gewone site</a>
+      <p>Daar staat de knop, het hele jaar door</p>
+    </div>
+  </main>
+
+  <footer>
+    <span>siegobert.com</span>
+    <nav>
+      <a href="profiel.html">Werkervaring</a>
+      <a href="https://www.linkedin.com/in/siegobert/" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="https://about.me/siegobert" target="_blank" rel="noreferrer">about.me</a>
+    </nav>
+  </footer>
+</div>
+
+<!-- het luikje -->
+<div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="pday">
+  <div class="box">
+    <button class="close" type="button" id="close" aria-label="Sluiten">&times;</button>
+    <div id="pbody"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var DAGEN = {
+    1116: {t:"De boot is binnen.", s:"Zaterdag de intocht. Vanaf vanavond mag de schoen, en vanaf vanavond klopt er iets niet meer aan de normale gang van zaken. Drie weken lang."},
+    1117: {t:"Voor het eerst de schoen.", s:"Niet te dicht bij de verwarming, zeg ik er maar bij. Dat is één keer misgegaan en daar wordt nog over gesproken."},
+    1118: {v:"Het paard van Sinterklaas staat\nvannacht bij ons op het plein.\nIk heb een wortel neergelegd,\ndat leek me wel zo fijn.\n\nVanmorgen lag hij er nog,\nonaangeroerd en koud.\nZelfs een paard, zo blijkt maar weer,\nhoudt niet van wat jij houdt."},
+    1119: {t:"Kruidnoten.", s:"Ze liggen sinds september in de winkel en sinds vandaag officieel in de kantine. Daar zit twee maanden volhouden tussen."},
+    1120: {t:"Een briefje in de schoen.", s:"In een handschrift dat duidelijk op een dak is geschreven. Vrijdag is briefjesdag, dat is hier zo gegroeid."},
+    1121: {t:"Zaterdag: schoen zetten.", s:"En 's ochtends iets kleins erin. De kunst is om het klein te houden, want de verwachtingen lopen anders snel op."},
+    1122: {t:"Zondag: kruidnoten bakken.", s:"Het deeg is simpel, het wachten niet. Halverwege is er altijd iemand die vindt dat er al genoeg gebakken is."},
+    1123: {t:"Maandag: een verhaaltje.", s:"Over een boot, een pakhuis en een organisatie die op één avond per jaar heel Nederland bedient. Daar kan ik beroepsmatig iets van leren."},
+    1124: {t:"Dinsdag: een speculaasje.", s:"Eén. Dat is de afspraak. Die afspraak houdt het zelden tot woensdag."},
+    1125: {t:"Woensdag: schoen met tekening.", s:"De tekening is belangrijker dan de schoen. Dat geldt voor meer dingen."},
+    1126: {t:"Donderdag: een liedje.", s:"Vals gezongen, maar met overtuiging. In een concertzaal is dat eerlijk gezegd een gedurfde keuze."},
+    1127: {v:"Een briefje in de schoen vanmorgen,\nin haastig handschrift, nogal klein:\n\n\u201cWij komen graag nog eens terug,\nmaar dan wel n\u00e1 de laatste trein.\nUw bar sluit veel te vroeg, meneer,\nom half twaalf gaat het licht al uit.\u201d\n\nGetekend: Piet, afdeling daken.\nP.S. Uw koffie viel niet tegen."},
+    1128: {t:"Zaterdag: nog één keer de schoen.", s:"Met iets kleins erin. De grote avond komt eraan en alles wat je nu weggeeft, mis je daar."},
+    1129: {t:"Zondag: een spelletje.", s:"Of niets doen. Dat is ook een spelletje, maar dan zonder regels en met meer rendement."},
+    1130: {t:"Laatste week.", s:"Vanaf morgen lopen de twee kalenders naast elkaar: de schoen en de adventsdeurtjes. Dat is druk, en dat is het punt."},
+    1201: {v:"Op het verlanglijstje stond\ngeen boek en ook geen bal.\nEr stond: een scherper contract\n\u00e9n koeling voor de hal.\n\nDe Sint heeft lang gekeken,\nen schreef er toen maar bij:\n\u201cDit kind is dertig jaar te oud.\nStuur door naar de ICT.\u201d"},
+    1202: {t:"Surprise knutselen.", s:"Karton, lijm en een idee dat op papier beter was. Ik heb projecten gekend die precies zo verliepen."},
+    1203: {t:"Strooigoed.", s:"Het ligt overal, het komt nooit meer helemaal weg, en in maart vind je er nog één onder een kast. Dat is geen klacht maar een constatering."},
+    1204: {v:"De laatste schoen staat bij de deur,\nmet wortel en met brief.\nDaarnaast \u2014 maar dat blijft onder ons \u2014\neen glas voor wie dat lief\n\nis na een nacht van daken,\nvan schoorstenen en kou.\nIn onze boekhouding, dat terzijde,\nvalt dat glas gewoon onder bier."},
+    1205: {v:"Sinterklaas zat te vergaderen,\nwant ook hij heeft een MT.\n\u201cWie regelt daar in Eindhoven\nde horeca \u00e9n de ICT?\u201d\n\nEen Piet keek in de stukken\nen zei: \u201cDat is er \u00e9\u00e9n.\nHij onderhandelt de contracten\nen regelt ook meteen\n\nde koffie, de koeling, de laptops,\nde licenties en de bar.\u201d\nSint zei: \u201cDan hoeft die man geen pakje.\nGeef hem gewoon een jaar\n\nwaarin de zaal elke avond vol zit,\nhet rooster altijd klopt,\nen niemand kwart voor acht nog iets bestelt\nwat twee minuten eerder op was.\u201d", s:"Pakjesavond. Tot zover het gedicht; de rest van de avond is van u."},
+    1206: {t:"Sinterklaas is het land uit. Vanavond: Metropole Orkest met SYML.", s:"In Belgi\u00eb staan de schoenen vanochtend nog vol \u2014 mijn ouders zijn daar ooit naartoe verhuisd, dus ik weet dat het daar een dag later pas feest is. Hier begint vanaf vanavond iets anders: drie keer publiek binnen op \u00e9\u00e9n dag."},
+    1207: {t:"Maandag. De zaal is donker.", s:"Nergens in de stad iets noemenswaardigs. Dit zijn de dagen waarop het echte werk gebeurt: bestellen, roosteren, en opruimen wat er zaterdag is blijven staan."},
+    1208: {t:"Bij ons niets. In het Parktheater wel: Esther van der Voort.", s:"Mijn oude huis. Zeventien jaar lang stond ik daar als het licht uitging."},
+    1209: {t:"Jimmy Carr, twee keer op één avond.", s:"Zeven uur en tien uur. Daartussen moet de zaal leeg, schoon en weer vol. Dat is krap, en het lukt altijd."},
+    1210: {t:"Janine Jansen en Alexandre Kantorow.", s:"Viool en piano. Een avond waarop de bar vooral in de pauze bestaat en daarna vrijwel niets meer doet. Ook dat is een vorm van succes."},
+    1211: {t:"Drie dingen tegelijk: Novastar, Frank Lammers met JW Roy, en The Jazz Room.", s:"Eén gebouw, drie zalen, drie publieksstromen die elkaar niet mogen tegenkomen. Precies waar mijn vak over gaat."},
+    1212: {t:"Frank Lammers en JW Roy, de tweede avond.", s:"Twee keer dezelfde voorstelling is voor ons niet twee keer hetzelfde. Het tweede publiek weet wat het komt doen en bestelt eerder."},
+    1213: {t:"Zondag. Bij ons stil, in het Parktheater MidwinterSalsa.", s:"Een heel festival aan dansen. Daar gaat meer water doorheen dan bier, en dat is voor de inkoop een ander verhaal."},
+    1214: {t:"Maandag in het Parktheater: Andries Tunru en Stefan Hendrikx.", s:"Bij ons donker. Tussen twee drukke weekenden in is een lege maandag geen gat maar een noodzaak."},
+    1215: {t:"Niets. Nergens.", s:"De laatste werkelijk lege dag van het jaar. Vanaf morgen gaat het door tot en met oudjaar."},
+    1216: {t:"An Irish Christmas, van Celtic Steps.", s:"Dansen, doedelzakken en een zaal die halverwege meeklapt. Vanaf vanavond is het hier officieel kerst."},
+    1217: {t:"Jan van Duikeren en Marcel Veenendaal.", s:"Trompet en stem. En in het Parktheater staat Waylon, dus de hele binnenstad zit vol. Dat merken wij aan de garderobe."},
+    1218: {t:"Bouke rockt Elvis, en MELL VF speelt A Soulful December.", s:"Twee zalen, twee totaal verschillende publieken, één garderobe. Daar is over nagedacht, al hoop ik dat u dat niet ziet."},
+    1219: {t:"Krezip.", s:"Plus twee Candlelight-concerten en Yoràn Vroom. Vier keer publiek op één dag. Dit is de drukste dag van mijn december, en ik tel hem al weken af."},
+    1220: {t:"Dawn Brothers.", s:"Zondagavond, na de drukste zaterdag van het jaar. Alles wat gisteren op is gegaan, staat vanavond weer koud."},
+    1221: {t:"Kortste dag van het jaar. Geen voorstelling.", s:"Voor ons begint hij om vier uur 's middags, en dat is precies wanneer dit gebouw er het mooist uitziet."},
+    1222: {t:"Stil.", s:"De laatste dag om iets te regelen dat nog niet geregeld is. Die dag bestaat elk jaar, en elk jaar is hij te kort."},
+    1223: {t:"Fresku met het Metropole Orkest.", s:"En daarnaast twee keer Candlelight. De laatste avond van het jaar waarop hier iets gebeurt, en meteen een van de mooiste."},
+    1224: {t:"Kerstavond. Geen voorstelling.", s:"Voor het eerst in weken gaan de deuren niet open. Terwijl u aan tafel zit, is het hier donker — en dat is één keer per jaar precies goed. Fijne kerst.", form:true}
+  };
+
+
+  var STAR = {
+    t:"Ik heet Siegobert naar mijn overgrootvader Sigebert van Dreumel uit Wamel.",
+    s:"Landbouwer, 1853 tot 1942, achtentachtig geworden. Vandaag geen grap, geen cijfer en geen bar. Alleen dat."
+  };
+
+  var MND = {11:"november", 12:"december"};
+  function label(k){
+    if (k === "ster") return "25 december";
+    if (k > 1000) return (k % 100) + " " + MND[Math.floor(k / 100)];
+    return k + " december";
+  }
+
+  var body = document.body,
+      plug = document.getElementById("plug"),
+      star = document.getElementById("star"),
+      panel = document.getElementById("panel"),
+      pbody = document.getElementById("pbody"),
+      closeBtn = document.getElementById("close"),
+      preview = document.getElementById("preview"),
+      lastFocus = null;
+
+  var now = new Date(),
+      december = now.getMonth() === 11,
+      vandaag = december ? now.getDate() : 0,
+      vandaagKey = (now.getMonth() + 1) * 100 + now.getDate(),
+      voorvertoning = window.location.search.indexOf("alles") > -1;
+
+  document.getElementById("jaar").textContent = now.getFullYear();
+  if (voorvertoning) preview.hidden = false;
+
+  /* wat iemand al geopend heeft, onthouden we in de browser */
+  var seen = {};
+  try { seen = JSON.parse(localStorage.getItem("kerst-" + now.getFullYear()) || "{}"); } catch(e){}
+  function remember(k){
+    seen[k] = 1;
+    try { localStorage.setItem("kerst-" + now.getFullYear(), JSON.stringify(seen)); } catch(e){}
+  }
+
+  function open(k, data){
+    lastFocus = document.activeElement;
+    var html = '<p class="day' + (data.v ? ' rood' : '') + '" id="pday">' + label(k) + '</p>';
+    if (data.n) html += '<p class="huge">' + data.n + '</p>';
+    if (data.v) html += '<p class="vers">' + data.v + '</p>';
+    if (data.t) html += '<p class="txt">' + data.t + '</p>';
+    if (data.s) html += '<p class="sub">' + data.s + '</p>';
+    if (data.form) html +=
+      '<form name="nieuws" method="POST" data-netlify="true" netlify-honeypot="bot-field">' +
+      '<input type="hidden" name="form-name" value="nieuws">' +
+      '<p hidden><input name="bot-field"></p>' +
+      '<input type="email" name="email" required placeholder="uw@adres.nl" aria-label="E-mailadres">' +
+      '<button type="submit">Volgend jaar weer</button>' +
+      '</form>';
+    pbody.innerHTML = html;
+
+    var f = pbody.querySelector("form");
+    if (f) f.addEventListener("submit", function(e){
+      e.preventDefault();
+      var payload = new URLSearchParams(new FormData(f)).toString();
+      f.outerHTML = '<p class="done">Een moment…</p>';
+      fetch("/", {method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded"}, body:payload})
+        .then(function(r){
+          var el = pbody.querySelector(".done");
+          if (el) el.textContent = r.ok ? "Genoteerd. Tot volgend jaar." : "Dat ging mis. Probeer het zo nog eens.";
+        })
+        .catch(function(){
+          var el = pbody.querySelector(".done");
+          if (el) el.textContent = "Dat ging mis. Probeer het zo nog eens.";
+        });
+    });
+
+    panel.classList.add("on");
+    closeBtn.focus();
+    remember(k);
+  }
+
+  function shut(){
+    panel.classList.remove("on");
+    if (lastFocus) lastFocus.focus();
+  }
+  closeBtn.addEventListener("click", shut);
+  panel.addEventListener("click", function(e){ if (e.target === panel) shut(); });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape" && panel.classList.contains("on")) shut();
+  });
+
+  /* één rij deurtjes, van de intocht tot kerstavond */
+  var grid = document.getElementById("grid");
+  Object.keys(DAGEN).map(Number).sort(function(a,b){return a-b;}).forEach(function(key){
+    var b = document.createElement("button"),
+        dag = key % 100,
+        mnd = Math.floor(key / 100),
+        data = DAGEN[key],
+        ok = voorvertoning || vandaagKey >= key;
+
+    b.className = "door" + (data.v ? " vers" : "");
+    b.type = "button";
+    b.innerHTML = dag + '<small>' + (mnd === 11 ? "nov" : "dec") + '</small>';
+    b.style.transform = "rotate(" + ((dag % 3) - 1) * 0.6 + "deg)";
+
+    if (!ok) b.classList.add("locked");
+    if (key === vandaagKey) b.classList.add("today");
+    if (seen[key]) b.classList.add("opened");
+    b.setAttribute("aria-label", label(key) + (ok ? "" : " — nog gesloten"));
+
+    b.addEventListener("click", function(){
+      if (!ok){
+        open(key, {t:"Nog even geduld.", s:"Dat geldt deze weken voor meer dingen."});
+        b.classList.remove("opened");
+        delete seen[key];
+        return;
+      }
+      b.classList.add("opened");
+      open(key, data);
+    });
+    grid.appendChild(b);
+  });
+
+  /* de ster: alleen op eerste kerstdag */
+  var ster_ok = voorvertoning || (december && vandaag >= 25);
+  if (ster_ok) star.classList.remove("locked");
+  if (seen.ster) star.classList.add("opened");
+  star.addEventListener("click", function(){
+    if (!ster_ok){
+      open("ster", {t:"Nog even geduld.", s:"De ster gaat pas op eerste kerstdag aan."});
+      delete seen.ster;
+      return;
+    }
+    open("ster", STAR);
+  });
+
+  /* de achtervolging loopt tot en met 6 december */
+  var jacht = document.getElementById("jacht");
+  if (jacht && !voorvertoning && vandaagKey > 1206) jacht.remove();
+
+  /* de stekker */
+  plug.addEventListener("click", function(){ body.classList.add("lit"); });
+  document.addEventListener("keydown", function(e){
+    if (!body.classList.contains("lit") && (e.key === "Enter" || e.key === " ")){
+      if (document.activeElement === plug) return;
+      e.preventDefault(); plug.click();
+    }
+  });
+})();
+</script>
+</body>
+</html>
