@@ -330,7 +330,34 @@
     if (it.t) html += '<p class="txt">' + it.t + '</p>';
     if (it.s) html += '<p class="sub">' + it.s + '</p>';
     if (it.href) html += '<a class="jump" href="' + it.href + '">' + it.cta + ' &rarr;</a>';
+    if (it.form) html +=
+      '<form class="sub-form" name="nieuws" method="POST" data-netlify="true" netlify-honeypot="bot-field">' +
+      '<input type="hidden" name="form-name" value="nieuws">' +
+      '<p hidden><input name="bot-field"></p>' +
+      '<input type="email" name="email" required placeholder="uw@adres.nl" aria-label="E-mailadres">' +
+      '<button type="submit">Noteer maar</button>' +
+      '</form>';
     card.innerHTML = html;
+
+    var f = card.querySelector("form.sub-form");
+    if (f) f.addEventListener("submit", function(e){
+      e.preventDefault();
+      var data = new URLSearchParams(new FormData(f)).toString();
+      f.outerHTML = '<p class="done">Een moment\u2026</p>';
+      fetch("/", {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: data
+      }).then(function(r){
+        var el = card.querySelector(".done");
+        if (el) el.textContent = r.ok
+          ? "Genoteerd. U hoort het als er iets te melden valt."
+          : "Dat ging mis. Probeer het zo nog eens.";
+      }).catch(function(){
+        var el = card.querySelector(".done");
+        if (el) el.textContent = "Dat ging mis. Probeer het zo nog eens.";
+      });
+    });
     card.classList.remove("pop");
     void card.offsetWidth;
     card.classList.add("pop");
