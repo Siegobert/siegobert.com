@@ -136,6 +136,24 @@
   .card a.jump:hover{background:var(--fg);color:var(--bg)}
   .card a.jump:focus-visible{outline:3px solid var(--fg);outline-offset:4px}
 
+  .card form.sub-form{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+  .card form.sub-form input{
+    font-family:var(--sans);font-size:15px;font-weight:500;color:inherit;
+    background:transparent;border:2px solid currentColor;border-radius:999px;
+    padding:11px 16px;min-width:min(250px,70vw);
+  }
+  .card form.sub-form input::placeholder{color:currentColor;opacity:.5}
+  .card form.sub-form input:focus-visible{outline:3px solid var(--fg);outline-offset:3px}
+  .card form.sub-form button{
+    font-family:var(--sans);font-size:13px;font-weight:800;letter-spacing:.06em;
+    text-transform:uppercase;cursor:pointer;
+    background:var(--fg);color:var(--bg);border:2px solid var(--fg);
+    border-radius:999px;padding:11px 20px;
+  }
+  .card form.sub-form button:hover{opacity:.85}
+  .card form.sub-form button:focus-visible{outline:3px solid var(--fg);outline-offset:3px}
+  .card .done{font-size:15px;font-weight:500;margin:6px 0 0}
+
   .pop{animation:pop .36s cubic-bezier(.2,1.5,.4,1)}
   @keyframes pop{from{opacity:0;transform:scale(.93) translateY(8px)}to{opacity:1;transform:none}}
 
@@ -171,6 +189,11 @@
     <p class="whisper" id="whisper">Neem de tijd. Het is hier toch al donker.</p>
   </div>
 </div>
+
+<form name="nieuws" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="email" name="email" />
+  <input name="bot-field" />
+</form>
 
 <div class="top">
   <span><b>Siegobert Jansen</b> &mdash; Muziekgebouw Eindhoven</span>
@@ -268,6 +291,9 @@
     {k:"Bronnenkritiek", t:"Eén bandnaam, drie verschillende spellingen in de brondocumenten.", s:"Ik heb de juiste eruit gehaald via de titels op de merchandise. Niemand heeft daar ooit naar gevraagd."},
     {k:"Een middag kwijt", t:"Twee exportbestanden uit hetzelfde kassasysteem, waarvan er bij één de prijskolom een plek was opgeschoven.", s:"Dat soort dingen kost een middag en levert geen enkel verhaal op. Behalve dit dan."},
     {k:"In één jaar", t:"Een nieuw ticketsysteem én een klantdataplatform ingevoerd.", s:"Beide tegelijk. Dat raad ik niemand aan, en ik zou het zo weer doen."},
+
+    // ---- het aanmeldkaartje ----
+    {k:"Aanbod", t:"Zo af en toe staat hier iets nieuws.", s:"Wilt u dat weten? Laat uw adres achter. Ik gebruik het nergens anders voor, en vaker dan twee keer per jaar wordt het niets.", form:true},
 
     // ---- de doorverwijzingen ----
     {k:"Bijlage A", t:"De lange versie staat ergens anders.", s:"Drie functies, de trajecten die eronder hingen, en wat het opleverde.", href:"profiel.html", cta:"Werkervaring"},
