@@ -11,6 +11,18 @@
 <meta property="og:url" content="https://siegobert.com/" />
 <meta property="og:image" content="https://aboutme.b-cdn.net/background/users/s/i/e/siegobert_1696230103_531.jpg?quality=80&amp;format=auto&amp;width=1200&amp;height=630&amp;face_crop=373,196" />
 <meta name="twitter:card" content="summary_large_image" />
+<script>
+/* Van 16 november tot en met 24 december neemt de decemberkalender het over.
+   Op 25 december stopt dit vanzelf en staat de gewone site er weer.
+   Met ?gewoon kom je er altijd langs. */
+(function(){
+  var d = new Date(), m = d.getMonth(), dag = d.getDate();
+  var seizoen = (m === 10 && dag >= 16) || (m === 11 && dag <= 24);
+  if (seizoen && window.location.search.indexOf("gewoon") === -1) {
+    window.location.replace("kerst.html");
+  }
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
