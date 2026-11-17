@@ -167,6 +167,10 @@
   footer a:hover{opacity:1}
   footer a:focus-visible{outline:2px solid currentColor;outline-offset:3px}
 
+  /* ---------- vuurwerk achter de pagina ---------- */
+  #vuurwerk{position:fixed;inset:0;z-index:0;pointer-events:none}
+  .top,main,footer{position:relative;z-index:1}
+
   /* ---------- lichtsnoer langs de rand ---------- */
   .lichtjes{position:fixed;inset:0;z-index:40;pointer-events:none}
   .snoer{position:absolute;background:rgba(10,10,10,.34)}
@@ -225,6 +229,8 @@
   <input name="bot-field" />
 </form>
 
+<canvas id="vuurwerk" aria-hidden="true"></canvas>
+
 <div class="lichtjes" id="lichtjes" aria-hidden="true">
   <span class="snoer boven"></span>
   <span class="snoer onder"></span>
@@ -260,10 +266,21 @@
 </footer>
 
 <script>
+/* wat er te zien is, hangt van de datum af:
+   16 november t/m 26 december lampjes, 27 december t/m 2 januari vuurwerk */
+var SEIZOEN = (function(){
+  var d = new Date(), m = d.getMonth(), dag = d.getDate(), q = window.location.search;
+  return {
+    lampjes:  q.indexOf("lampjes")  > -1 || (m === 10 && dag >= 16) || (m === 11 && dag <= 26),
+    vuurwerk: q.indexOf("vuurwerk") > -1 || (m === 11 && dag >= 27) || (m === 0 && dag <= 2)
+  };
+})();
+
 /* het lichtsnoer langs de rand */
 (function(){
   var doos = document.getElementById("lichtjes");
   if (!doos) return;
+  if (!SEIZOEN.lampjes){ doos.remove(); return; }
   var kleuren = ["k1","k2","k3","k4","k5"], AFSTAND = 46;
 
   function hang(){
@@ -301,6 +318,114 @@
     clearTimeout(wacht);
     wacht = setTimeout(hang, 220);
   });
+})();
+
+
+/* vuurwerk achter de pagina */
+(function(){
+  var cv = document.getElementById("vuurwerk");
+  if (!cv) return;
+  if (!SEIZOEN.vuurwerk || window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    cv.remove();
+    return;
+  }
+
+  var ctx = cv.getContext("2d"), dpr = Math.min(window.devicePixelRatio || 1, 2),
+      b = 0, h = 0, deeltjes = [], pijlen = [], draait = true, raf = null, klok = null;
+
+  function maat(){
+    b = window.innerWidth; h = window.innerHeight;
+    cv.width = b * dpr; cv.height = h * dpr;
+    cv.style.width = b + "px"; cv.style.height = h + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  maat();
+
+  /* lichte achtergrond vraagt om donkere vonken, en andersom */
+  function licht(){
+    var kleur = getComputedStyle(document.body).backgroundColor,
+        m = kleur.match(/\d+/g);
+    if (!m) return false;
+    return (0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2]) / 255 > 0.55;
+  }
+  var FEL   = ["#FFFFFF","#FFD36B","#FF6B7A","#7FE3A8","#8FB8FF","#E7A6FF"],
+      DIEP  = ["#1A1A1A","#A8000F","#0A5B2E","#1A2F8F","#7A4A00","#6B1B6B"];
+
+  function pijl(){
+    if (pijlen.length > 3) return;
+    var x = b * (0.15 + Math.random() * 0.7),
+        doel = h * (0.14 + Math.random() * 0.3);
+    pijlen.push({x:x, y:h + 10, vx:(Math.random()-0.5)*0.6, vy:-(7 + Math.random()*3),
+                 doel:doel, kleur:(licht() ? DIEP : FEL)[Math.floor(Math.random()*6)]});
+  }
+
+  function knal(x, y, kleur){
+    var aantal = 48 + Math.floor(Math.random() * 34),
+        bol = Math.random() < 0.45,
+        set = licht() ? DIEP : FEL;
+    for (var i = 0; i < aantal; i++){
+      var hoek = Math.random() * Math.PI * 2,
+          kracht = bol ? (2.6 + Math.random() * 0.7) : (0.6 + Math.random() * 3.4);
+      deeltjes.push({
+        x:x, y:y,
+        vx:Math.cos(hoek) * kracht, vy:Math.sin(hoek) * kracht,
+        leven:1, verval:0.009 + Math.random() * 0.012,
+        kleur: Math.random() < 0.7 ? kleur : set[Math.floor(Math.random() * set.length)]
+      });
+    }
+  }
+
+  function stap(){
+    ctx.clearRect(0, 0, b, h);
+    ctx.lineCap = "round";
+    var fel = !licht();
+    ctx.globalCompositeOperation = fel ? "lighter" : "source-over";
+
+    for (var i = pijlen.length - 1; i >= 0; i--){
+      var p = pijlen[i];
+      p.x += p.vx; p.y += p.vy; p.vy += 0.045;
+      ctx.globalAlpha = 0.9;
+      ctx.strokeStyle = p.kleur; ctx.lineWidth = 2.4;
+      ctx.beginPath(); ctx.moveTo(p.x - p.vx * 2.2, p.y - p.vy * 2.2); ctx.lineTo(p.x, p.y); ctx.stroke();
+      if (p.y <= p.doel || p.vy >= 0){ knal(p.x, p.y, p.kleur); pijlen.splice(i, 1); }
+    }
+
+    for (var j = deeltjes.length - 1; j >= 0; j--){
+      var d = deeltjes[j];
+      d.x += d.vx; d.y += d.vy;
+      d.vy += 0.034; d.vx *= 0.986; d.vy *= 0.986;
+      d.leven -= d.verval;
+      if (d.leven <= 0 || d.y > h + 40){ deeltjes.splice(j, 1); continue; }
+      ctx.globalAlpha = Math.max(0, d.leven) * (fel ? 1 : 0.8);
+      ctx.strokeStyle = d.kleur; ctx.lineWidth = fel ? 2.2 : 2.6;
+      ctx.beginPath(); ctx.moveTo(d.x - d.vx * 2.4, d.y - d.vy * 2.4); ctx.lineTo(d.x, d.y); ctx.stroke();
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+    if (draait) raf = requestAnimationFrame(stap);
+  }
+
+  function aan(){
+    if (klok) return;
+    draait = true;
+    klok = setInterval(function(){ if (Math.random() < 0.78) pijl(); }, 1100);
+    raf = requestAnimationFrame(stap);
+  }
+  function uit(){
+    draait = false;
+    clearInterval(klok); klok = null;
+    cancelAnimationFrame(raf);
+  }
+
+  window.addEventListener("resize", maat);
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden) uit(); else aan();
+  });
+
+  pijl();
+  setTimeout(pijl, 700);
+  aan();
 })();
 
 (function(){
