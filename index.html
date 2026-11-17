@@ -167,7 +167,37 @@
   footer a:hover{opacity:1}
   footer a:focus-visible{outline:2px solid currentColor;outline-offset:3px}
 
+  /* ---------- lichtsnoer langs de rand ---------- */
+  .lichtjes{position:fixed;inset:0;z-index:40;pointer-events:none}
+  .snoer{position:absolute;background:rgba(10,10,10,.34)}
+  .snoer.boven{top:9px;left:0;right:0;height:2px}
+  .snoer.onder{bottom:9px;left:0;right:0;height:2px}
+  .snoer.links{left:9px;top:0;bottom:0;width:2px}
+  .snoer.rechts{right:9px;top:0;bottom:0;width:2px}
+
+  .lamp{
+    position:absolute;width:9px;height:9px;border-radius:50%;
+    background:currentColor;box-shadow:0 0 9px 2px currentColor;
+    animation:knipper 2.6s ease-in-out infinite;
+  }
+  .lamp::before{
+    content:"";position:absolute;width:4px;height:4px;border-radius:1px;
+    background:rgba(10,10,10,.45);
+  }
+  .lamp.b{transform:translateX(-50%)}
+  .lamp.b::before{left:50%;margin-left:-2px;top:-4px}
+  .lamp.o{transform:translateX(-50%)}
+  .lamp.o::before{left:50%;margin-left:-2px;bottom:-4px}
+  .lamp.l{transform:translateY(-50%)}
+  .lamp.l::before{top:50%;margin-top:-2px;left:-4px}
+  .lamp.r{transform:translateY(-50%)}
+  .lamp.r::before{top:50%;margin-top:-2px;right:-4px}
+
+  .k1{color:#E83A4A}.k2{color:#1F9E52}.k3{color:#E8B356}.k4{color:#2F6FD8}.k5{color:#F4EFE3}
+  @keyframes knipper{0%,100%{opacity:1}50%{opacity:.34}}
+
   @media (prefers-reduced-motion:reduce){
+    .lamp{animation:none;opacity:.9}
     body,button.big,.card a.jump,.top,main,footer{transition:none}
     button.bigswitch .dot{animation:none;opacity:.9}
     .blackout .whisper{transition:none}
@@ -194,6 +224,13 @@
   <input type="email" name="email" />
   <input name="bot-field" />
 </form>
+
+<div class="lichtjes" id="lichtjes" aria-hidden="true">
+  <span class="snoer boven"></span>
+  <span class="snoer onder"></span>
+  <span class="snoer links"></span>
+  <span class="snoer rechts"></span>
+</div>
 
 <div class="top">
   <span><b>Siegobert Jansen</b> &mdash; Muziekgebouw Eindhoven</span>
@@ -223,6 +260,49 @@
 </footer>
 
 <script>
+/* het lichtsnoer langs de rand */
+(function(){
+  var doos = document.getElementById("lichtjes");
+  if (!doos) return;
+  var kleuren = ["k1","k2","k3","k4","k5"], AFSTAND = 46;
+
+  function hang(){
+    Array.prototype.slice.call(doos.querySelectorAll(".lamp")).forEach(function(el){ el.remove(); });
+
+    var w = window.innerWidth, h = window.innerHeight, n = 0;
+
+    function lamp(klasse, stijl){
+      var el = document.createElement("span");
+      el.className = "lamp " + klasse + " " + kleuren[n % kleuren.length];
+      el.style.animationDelay = ((n % 7) * 0.33).toFixed(2) + "s";
+      for (var k in stijl) el.style[k] = stijl[k];
+      doos.appendChild(el);
+      n++;
+    }
+
+    var perRij = Math.max(3, Math.round(w / AFSTAND)),
+        perKolom = Math.max(3, Math.round(h / AFSTAND));
+
+    for (var i = 1; i < perRij; i++){
+      var x = (i / perRij * 100) + "%";
+      lamp("b", {left:x, top:"10px"});
+      lamp("o", {left:x, bottom:"10px"});
+    }
+    for (var j = 1; j < perKolom; j++){
+      var y = (j / perKolom * 100) + "%";
+      lamp("l", {top:y, left:"10px"});
+      lamp("r", {top:y, right:"10px"});
+    }
+  }
+
+  hang();
+  var wacht;
+  window.addEventListener("resize", function(){
+    clearTimeout(wacht);
+    wacht = setTimeout(hang, 220);
+  });
+})();
+
 (function(){
   var PALETTE = [
     ["#FFE600","#141414"], ["#C4300F","#FFF6F2"], ["#0B6E4F","#F2FBF6"],
