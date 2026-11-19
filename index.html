@@ -258,10 +258,23 @@ var SEIZOEN = (function(){
     cv.width = b * dpr; cv.height = h * dpr;
     cv.style.width = b + "px"; cv.style.height = h + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    vx = b * (b < 760 ? 0.30 : 0.21);
-    vy = h * 0.42;
-    maxR = Math.hypot(Math.max(vx, b - vx), Math.max(vy, h - vy)) * 1.08;
+    plaats();
     vul();
+  }
+
+  /* de ster schuift in ruim vier minuten van links midden naar rechtsboven,
+     en even langzaam weer terug */
+  var REIS = 260000;
+  function plaats(){
+    var k = 0.5;
+    if (!stil){
+      var f = (Date.now() % REIS) / REIS;        // 0 .. 1
+      k = f < 0.5 ? f * 2 : (1 - f) * 2;          // heen en weer
+      k = k * k * (3 - 2 * k);                    // zacht aan het begin en eind
+    }
+    vx = b * (0.15 + k * 0.70);
+    vy = h * (0.52 - k * 0.36);
+    maxR = Math.hypot(Math.max(vx, b - vx), Math.max(vy, h - vy)) * 1.08;
   }
 
   function nieuweStreep(begin){
@@ -288,12 +301,13 @@ var SEIZOEN = (function(){
   function teken(){
     ctx.clearRect(0, 0, b, h);
 
-    /* de flits */
-    var g = ctx.createRadialGradient(vx, vy, 0, vx, vy, Math.max(b, h) * 0.52);
-    g.addColorStop(0,    "rgba(255,255,255,.92)");
-    g.addColorStop(0.05, "rgba(255,248,235,.55)");
-    g.addColorStop(0.13, "rgba(173,214,235,.20)");
-    g.addColorStop(0.34, "rgba(32,92,126,.14)");
+    /* de ster, zacht */
+    plaats();
+    var g = ctx.createRadialGradient(vx, vy, 0, vx, vy, Math.max(b, h) * 0.46);
+    g.addColorStop(0,    "rgba(255,255,255,.46)");
+    g.addColorStop(0.03, "rgba(255,250,240,.26)");
+    g.addColorStop(0.11, "rgba(173,214,235,.12)");
+    g.addColorStop(0.30, "rgba(32,92,126,.08)");
     g.addColorStop(1,    "rgba(6,19,28,0)");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, b, h);
@@ -317,7 +331,7 @@ var SEIZOEN = (function(){
           x1 = vx + cx * Math.max(0, p.r - lengte), y1 = vy + cy * Math.max(0, p.r - lengte),
           x2 = vx + cx * p.r,                        y2 = vy + cy * p.r;
 
-      ctx.globalAlpha = Math.min(0.95, 0.10 + f * 0.85) * (p.kleur ? 0.75 : 1);
+      ctx.globalAlpha = Math.min(0.88, 0.06 + f * 0.82) * (p.kleur ? 0.75 : 1);
       ctx.strokeStyle = p.kleur ? kleur : "#EAF4FA";
       ctx.lineWidth = p.dik * (0.5 + f);
       ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
